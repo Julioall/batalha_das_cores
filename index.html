@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Batalha de Cores</title>
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Cormorant+Garamond:wght@600&display=swap%27);
+ 
+    :root {
+
+      --bg: #f7f7f5;
+
+      --paper: #ffffff;
+
+      --ink: #111111;
+
+      --muted: #5b5b5b;
+
+      --line: #111111;
+
+      --accent: #d62828;
+
+      --shadow: 6px 6px 0 #111111;
+
+      --radius-lg: 26px;
+
+      --radius-md: 18px;
+
+    }
+ 
+    * { box-sizing: border-box; }
+ 
+    body {
+
+      margin: 0;
+
+      font-family: 'Fredoka', system-ui, sans-serif;
+
+      min-height: 100vh;
+
+      color: var(--ink);
+
+      background:
+
+        radial-gradient(circle at 12% 14%, rgba(214,40,40,.06), transparent 18%),
+
+        radial-gradient(circle at 88% 10%, rgba(214,40,40,.05), transparent 14%),
+
+        repeating-linear-gradient(
+
+          0deg,
+
+          #f7f7f5,
+
+          #f7f7f5 24px,
+
+          #f3f3f1 24px,
+
+          #f3f3f1 25px
+
+        );
+
+    }
+ 
+    .app {
+
+      width: min(1180px, calc(100vw - 32px));
+
+      margin: 48px auto 24px;
+
+      display: grid;
+
+      gap: 20px;
+
+    }
+ 
+    .layout {
+
+      display: grid;
+
+      grid-template-columns: 1.2fr .8fr;
+
+      gap: 20px;
+
+    }
+ 
+    .card {
+
+      background: var(--paper);
+
+      border: 3px solid var(--line);
+
+      border-radius: var(--radius-lg);
+
+      box-shadow: var(--shadow);
+
+    }
+ 
+    .hero, .game, .info { padding: 24px; }
+ 
+    .hero {
+
+      margin-top: 18px;
+
+    }
+ 
+    .hero h1 {
+
+      margin: 0 0 10px;
+
+      font-family: 'Cormorant Garamond', serif;
+
+      font-size: clamp(2.5rem,4vw,4rem);
+
+      font-weight: 600;
+
+      letter-spacing: -.03em;
+
+      color: var(--ink);
+
+    }
+ 
+    .hero p {
+
+      margin: 0;
+
+      color: var(--muted);
+
+      line-height: 1.7;
+
+      max-width: 760px;
+
+    }
+ 
+    .section-title {
+
+      margin: 0 0 16px;
+
+      font-size: 1rem;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: .06em;
+
+    }
+ 
+    .theme-box,
+
+    .picker-group,
+
+    textarea,
+
+    .feedback,
+
+    .score-box,
+
+    .history-item {
+
+      background: #fff;
+
+      border: 2px solid var(--line);
+
+      border-radius: var(--radius-md);
+
+    }
+ 
+    .theme-box {
+
+      padding: 18px;
+
+      margin-bottom: 18px;
+
+      position: relative;
+
+    }
+ 
+     .theme-box::after {
+
+      content: '⚡';
+
+      position: absolute;
+
+      top: 14px;
+
+      right: 16px;
+
+      color: var(--accent);
+
+      font-size: 1.2rem;
+
+      animation: pulse 1s infinite alternate;
+
+    }
+ 
+    @keyframes pulse {
+
+      from { transform: scale(1); }
+
+      to { transform: scale(1.15); }
+
+    }
+ 
+    .label {
+
+      display: block;
+
+      font-size: .78rem;
+
+      font-weight: 700;
+
+      color: var(--muted);
+
+      margin-bottom: 8px;
+
+      text-transform: uppercase;
+
+      letter-spacing: .08em;
+
+    }
+ 
+    .theme-name {
+
+      font-size: 1.9rem;
+
+      font-weight: 700;
+
+    }
+ 
+    .timer {
+
+      display: inline-flex;
+
+      padding: 8px 14px;
+
+      border-radius: 999px;
+
+      background: #fff;
+
+      border: 2px solid var(--line);
+
+      font-weight: 700;
+
+      color: var(--accent);
+
+    }
+ 
+    .grid {
+
+      display: grid;
+
+      grid-template-columns: repeat(2,1fr);
+
+      gap: 14px;
+
+      margin-bottom: 18px;
+
+    }
+ 
+    .picker-group {
+
+      padding: 14px;
+
+      transition: .2s ease;
+
+    }
+ 
+    .picker-group:hover {
+
+      transform: rotate(-1deg) translateY(-2px);
+
+    }
+ 
+    .picker-group label {
+
+      font-weight: 700;
+
+      display: block;
+
+      margin-bottom: 8px;
+
+    }
+ 
+    input[type="color"] {
+
+      width: 100%;
+
+      height: 56px;
+
+      border: none;
+
+      background: transparent;
+
+      cursor: pointer;
+
+    }
+ 
+    .hex {
+
+      margin-top: 8px;
+
+      padding: 8px;
+
+      border-radius: 14px;
+
+      border: 2px dashed var(--line);
+
+      text-align: center;
+
+      font-weight: 700;
+
+    }
+ 
+    textarea {
+
+      width: 100%;
+
+      min-height: 120px;
+
+      padding: 16px;
+
+      border-radius: 18px;
+
+      font: inherit;
+
+      resize: vertical;
+
+    }
+ 
+    textarea:focus { outline: none; }
+ 
+    .actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-top: 16px;
+
+    }
+ 
+    button {
+
+      border: 2px solid var(--line);
+
+      border-radius: 16px;
+
+      padding: 12px 18px;
+
+      font-weight: 700;
+
+      font-family: inherit;
+
+      cursor: pointer;
+
+      background: #fff;
+
+      box-shadow: 3px 3px 0 #111;
+
+    }
+ 
+    .primary {
+
+      background: var(--accent);
+
+      color: white;
+
+    }
+ 
+    .secondary {
+
+      background: #fff;
+
+    }
+ 
+    .ghost {
+
+      background: #f1f1f1;
+
+    }
+ 
+    .preview { display: grid; gap: 14px; }
+ 
+    .mockup {
+
+      border: 3px solid var(--line);
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      min-height: 320px;
+
+      background: white;
+
+      position: relative;
+
+      display: grid;
+
+      grid-template-rows: auto 1fr;
+
+    }
+ 
+    .mockup::after {
+
+      content: '☺';
+
+      position: absolute;
+
+      bottom: 14px;
+
+      right: 16px;
+
+      font-size: 1.3rem;
+
+      color: var(--accent);
+
+    }
+ 
+    .mockup-top {
+
+      padding: 14px 16px;
+
+      font-weight: 700;
+
+      border-bottom: 2px solid var(--line);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 12px;
+
+    }
+ 
+    .mockup-brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      font-size: 1rem;
+
+    }
+ 
+    .mockup-logo {
+
+      width: 34px;
+
+      height: 34px;
+
+      border: 2px solid var(--line);
+
+      border-radius: 50%;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background: #fff;
+
+      font-size: 1rem;
+
+      flex-shrink: 0;
+
+    }
+ 
+    .mockup-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      justify-content: flex-end;
+
+    }
+ 
+    .mockup-nav-item {
+
+      border: 2px solid var(--line);
+
+      border-radius: 999px;
+
+      padding: 6px 10px;
+
+      font-size: .72rem;
+
+      font-weight: 700;
+
+      background: rgba(255,255,255,.9);
+
+    }
+ 
+    .mockup-body {
+
+      padding: 18px;
+
+      display: grid;
+
+      gap: 16px;
+
+      min-height: 240px;
+
+      grid-template-columns: 1.1fr .9fr;
+
+      align-items: stretch;
+
+    }
+ 
+    .mockup-hero {
+
+      border: 2px solid var(--line);
+
+      border-radius: 18px;
+
+      padding: 18px;
+
+      display: grid;
+
+      gap: 12px;
+
+      align-content: start;
+
+      background: rgba(255,255,255,.18);
+
+    }
+ 
+    .mockup-badge {
+
+      display: inline-flex;
+
+      width: fit-content;
+
+      border: 2px solid var(--line);
+
+      border-radius: 999px;
+
+      padding: 6px 10px;
+
+      font-size: .72rem;
+
+      font-weight: 700;
+
+      background: rgba(255,255,255,.9);
+
+    }
+ 
+    .mockup-title {
+
+      font-family: 'Cormorant Garamond', serif;
+
+      font-size: 2rem;
+
+      line-height: 1;
+
+      font-weight: 600;
+
+      max-width: 280px;
+
+    }
+ 
+    .mockup-copy {
+
+      display: grid;
+
+      gap: 10px;
+
+    }
+ 
+    .mockup-line {
+
+      height: 12px;
+
+      border-radius: 999px;
+
+    }
+ 
+    .mockup-line.small { width: 55%; }
+
+    .mockup-line.medium { width: 72%; }
+
+    .mockup-line.large { width: 88%; }
+ 
+    .mockup-actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-top: 4px;
+
+    }
+ 
+    .mockup-button {
+
+      min-width: 120px;
+
+      padding: 12px 14px;
+
+      border-radius: 16px;
+
+      font-weight: 700;
+
+      text-align: center;
+
+      border: 2px solid var(--line);
+
+    }
+ 
+    .mockup-button.secondary-button {
+
+      background: rgba(255,255,255,.82);
+
+    }
+ 
+    .mockup-side {
+
+      display: grid;
+
+      gap: 12px;
+
+      align-content: start;
+
+    }
+ 
+    .mockup-card {
+
+      border: 2px solid var(--line);
+
+      border-radius: 18px;
+
+      background: rgba(255,255,255,.82);
+
+      padding: 14px;
+
+      display: grid;
+
+      gap: 10px;
+
+    }
+ 
+    .mockup-card-title {
+
+      font-size: .82rem;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: .04em;
+
+    }
+ 
+    .mockup-swatch-row {
+
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+    }
+ 
+    .mockup-swatch {
+
+      width: 34px;
+
+      height: 34px;
+
+      border: 2px solid var(--line);
+
+      border-radius: 50%;
+
+      background: #fff;
+
+    }
+ 
+    .mockup-meter {
+
+      height: 14px;
+
+      border: 2px solid var(--line);
+
+      border-radius: 999px;
+
+      overflow: hidden;
+
+      background: rgba(255,255,255,.9);
+
+    }
+ 
+    .mockup-meter-fill {
+
+      width: 68%;
+
+      height: 100%;
+
+      background: var(--accent);
+
+    }
+ 
+    .mini {
+
+      font-size: .9rem;
+
+      color: var(--muted);
+
+    }
+ 
+    @media (max-width: 700px) {
+
+      .mockup-body {
+
+        grid-template-columns: 1fr;
+
+      }
+
+    }
+
+      font-size: .9rem;
+
+      color: var(--muted);
+
+    }
+ 
+    @media (max-width: 900px) {
+
+      .layout { grid-template-columns: 1fr; }
+
+    }
+ 
+    @media (max-width: 700px) {
+
+      .grid { grid-template-columns: 1fr; }
+
+      .actions { flex-direction: column; }
+
+      button { width: 100%; }
+
+    }
+</style>
+</head>
+<body>
+<main class="app">
+<section class="hero card">
+<h1>Batalha de Cores</h1>
+<p>
+
+        Jogo individual para praticar psicologia das cores. Escolha uma cor principal, uma secundária e uma de destaque para o tema sorteado. Depois explique sua escolha e veja um feedback automático.
+</p>
+</section>
+ 
+    <section class="layout">
+<div class="game card">
+<h2 class="section-title">Sua rodada</h2>
+ 
+        <div class="theme-box">
+<div class="label">Tema atual</div>
+<div class="theme-name" id="themeName">Tecnologia</div>
+<div class="timer">Tempo restante: <strong id="timer">60</strong>s</div>
+</div>
+ 
+        <div class="grid">
+<div class="picker-group">
+<label for="primaryColor">Cor principal</label>
+<input type="color" id="primaryColor" value="#2563eb" />
+<div class="hex" id="primaryHex">#2563EB</div>
+</div>
+ 
+          <div class="picker-group">
+<label for="secondaryColor">Cor secundária</label>
+<input type="color" id="secondaryColor" value="#64748b" />
+<div class="hex" id="secondaryHex">#64748B</div>
+</div>
+ 
+          <div class="picker-group">
+<label for="accentColor">Cor de destaque</label>
+<input type="color" id="accentColor" value="#22c55e" />
+<div class="hex" id="accentHex">#22C55E</div>
+</div>
+ 
+          <div class="picker-group">
+<label for="textColor">Cor do texto</label>
+<input type="color" id="textColor" value="#ffffff" />
+<div class="hex" id="textHex">#FFFFFF</div>
+</div>
+</div>
+ 
+        <label class="label" for="reason">Justificativa</label>
+<textarea id="reason" placeholder="Ex.: usei azul porque transmite confiança e tecnologia; o cinza passa modernidade; o verde serve como destaque para ações importantes."></textarea>
+ 
+        <div class="actions">
+<button class="primary" id="evaluateBtn">Avaliar resposta</button>
+<button class="secondary" id="nextBtn">Próximo tema</button>
+<button class="ghost" id="resetBtn">Reiniciar jogo</button>
+</div>
+</div>
+ 
+      <aside class="info card">
+<h2 class="section-title">Prévia visual</h2>
+<div class="preview">
+<div class="mockup" id="mockup">
+<div class="mockup-top" id="mockupTop">
+<div class="mockup-brand">
+<span class="mockup-logo" id="mockupLogo">☺</span>
+<span id="mockupBrandText">Color Lab</span>
+</div>
+<div class="mockup-nav">
+<span class="mockup-nav-item">Início</span>
+<span class="mockup-nav-item">Temas</span>
+<span class="mockup-nav-item">Jogar</span>
+</div>
+</div>
+<div class="mockup-body" id="mockupBody">
+<div class="mockup-hero">
+<div class="mockup-badge">Tema ativo</div>
+<div class="mockup-title" id="mockupTitle">Tecnologia</div>
+<div class="mockup-copy">
+<div class="mockup-line large"></div>
+<div class="mockup-line medium"></div>
+<div class="mockup-line small"></div>
+</div>
+<div class="mockup-actions">
+<div class="mockup-button" id="mockupButton">Começar</div>
+<div class="mockup-button secondary-button" id="mockupSecondaryButton">Explorar</div>
+</div>
+</div>
+<div class="mockup-side">
+<div class="mockup-card">
+<div class="mockup-card-title">Paleta</div>
+<div class="mockup-swatch-row">
+<span class="mockup-swatch" id="swatchPrimary"></span>
+<span class="mockup-swatch" id="swatchSecondary"></span>
+<span class="mockup-swatch" id="swatchAccent"></span>
+</div>
+</div>
+<div class="mockup-card">
+<div class="mockup-card-title">Energia visual</div>
+<div class="mockup-meter">
+<div class="mockup-meter-fill" id="mockupMeterFill"></div>
+</div>
+<div class="mockup-line medium"></div>
+<div class="mockup-line small"></div>
+</div>
+</div>
+</div>
+</div>
+ 
+          <div>
+<div class="label">Feedback</div>
+<div class="feedback" id="feedbackBox">
+
+              Escolha suas cores e clique em <strong>Avaliar resposta</strong> para receber uma análise.
+</div>
+</div>
+ 
+          <div class="score-box">
+<div class="label">Pontuação total</div>
+<div class="score" id="scoreValue">0</div>
+<div class="mini" id="roundInfo">Rodada 1 de 8</div>
+<div class="combo-bar">
+<div class="combo-fill" id="comboFill"></div>
+</div>
+<div class="mascot" id="mascot">🙂</div>
+</div>
+</div>
+</aside>
+</section>
+ 
+    <section class="card info">
+<h2 class="section-title">Histórico</h2>
+<div class="history" id="historyList">
+<div class="mini">Nenhuma rodada avaliada ainda.</div>
+</div>
+</section>
+</main>
+ 
+  <script>
+
+    const themes = [
+
+      {
+
+        name: 'Tecnologia',
+
+        idealFamilies: ['azul', 'ciano', 'cinza', 'branco', 'roxo'],
+
+        avoidFamilies: ['marrom'],
+
+        tips: 'Tecnologia costuma funcionar bem com tons frios, sensação de inovação, confiança e modernidade.'
+
+      },
+
+      {
+
+        name: 'Saúde',
+
+        idealFamilies: ['verde', 'azul', 'branco', 'ciano'],
+
+        avoidFamilies: ['preto', 'vermelho'],
+
+        tips: 'Saúde costuma pedir limpeza, equilíbrio, calma e sensação de cuidado.'
+
+      },
+
+      {
+
+        name: 'Comida',
+
+        idealFamilies: ['vermelho', 'laranja', 'amarelo', 'marrom', 'verde'],
+
+        avoidFamilies: ['cinza'],
+
+        tips: 'Comida geralmente combina com cores quentes e energéticas, que estimulam atenção e apetite.'
+
+      },
+
+      {
+
+        name: 'Educação',
+
+        idealFamilies: ['azul', 'verde', 'amarelo', 'branco'],
+
+        avoidFamilies: ['preto'],
+
+        tips: 'Educação pode misturar clareza, acolhimento e organização.'
+
+      },
+
+      {
+
+        name: 'Segurança',
+
+        idealFamilies: ['azul', 'preto', 'cinza', 'vermelho'],
+
+        avoidFamilies: ['rosa'],
+
+        tips: 'Segurança costuma comunicar força, confiança, alerta e controle.'
+
+      },
+
+      {
+
+        name: 'Jogos',
+
+        idealFamilies: ['roxo', 'azul', 'vermelho', 'laranja', 'ciano'],
+
+        avoidFamilies: [],
+
+        tips: 'Jogos permitem mais energia visual, contraste e personalidade.'
+
+      },
+
+      {
+
+        name: 'Meio ambiente',
+
+        idealFamilies: ['verde', 'marrom', 'azul', 'branco'],
+
+        avoidFamilies: ['rosa'],
+
+        tips: 'Meio ambiente pede associação com natureza, equilíbrio e frescor.'
+
+      },
+
+      {
+
+        name: 'Esporte',
+
+        idealFamilies: ['vermelho', 'azul', 'laranja', 'preto', 'verde'],
+
+        avoidFamilies: [],
+
+        tips: 'Esporte costuma aceitar cores vibrantes e sensação de energia.'
+
+      }
+
+    ];
+ 
+    const state = {
+
+      currentIndex: 0,
+
+      score: 0,
+
+      evaluatedRounds: 0,
+
+      timeLeft: 60,
+
+      timerId: null,
+
+      history: []
+
+    };
+ 
+    const themeName = document.getElementById('themeName');
+
+    const timer = document.getElementById('timer');
+
+    const scoreValue = document.getElementById('scoreValue');
+
+    const roundInfo = document.getElementById('roundInfo');
+
+    const feedbackBox = document.getElementById('feedbackBox');
+
+    const historyList = document.getElementById('historyList');
+
+    const comboFill = document.getElementById('comboFill');
+
+    const mascot = document.getElementById('mascot');
+ 
+    const primaryColor = document.getElementById('primaryColor');
+
+    const secondaryColor = document.getElementById('secondaryColor');
+
+    const accentColor = document.getElementById('accentColor');
+
+    const reason = document.getElementById('reason');
+
+    const textColor = document.getElementById('textColor');
+ 
+    const primaryHex = document.getElementById('primaryHex');
+
+    const secondaryHex = document.getElementById('secondaryHex');
+
+    const accentHex = document.getElementById('accentHex');
+
+    const textHex = document.getElementById('textHex');
+ 
+    const mockup = document.getElementById('mockup');
+
+    const mockupTop = document.getElementById('mockupTop');
+
+    const mockupBody = document.getElementById('mockupBody');
+
+    const mockupButton = document.getElementById('mockupButton');
+
+    const mockupSecondaryButton = document.getElementById('mockupSecondaryButton');
+
+    const mockupTitle = document.getElementById('mockupTitle');
+
+    const mockupLogo = document.getElementById('mockupLogo');
+
+    const mockupBrandText = document.getElementById('mockupBrandText');
+
+    const swatchPrimary = document.getElementById('swatchPrimary');
+
+    const swatchSecondary = document.getElementById('swatchSecondary');
+
+    const swatchAccent = document.getElementById('swatchAccent');
+
+    const mockupMeterFill = document.getElementById('mockupMeterFill');
+ 
+    function normalizeHex(hex) {
+
+      return hex.toUpperCase();
+
+    }
+ 
+    function updateHexLabels() {
+
+      primaryHex.textContent = normalizeHex(primaryColor.value);
+
+      secondaryHex.textContent = normalizeHex(secondaryColor.value);
+
+      accentHex.textContent = normalizeHex(accentColor.value);
+
+      textHex.textContent = normalizeHex(textColor.value);
+
+    }
+ 
+    function updatePreview() {
+
+      const currentTheme = themes[state.currentIndex].name;
+
+      const contrastAmount = Math.min(
+
+        Math.round(calculateContrast(primaryColor.value, secondaryColor.value) / 5),
+
+        100
+
+      );
+ 
+      mockup.style.background = primaryColor.value;
+
+      mockupTop.style.background = primaryColor.value;
+
+      mockupBody.style.background = secondaryColor.value;
+
+      mockupButton.style.background = accentColor.value;
+
+      mockupSecondaryButton.style.background = primaryColor.value;
+
+      mockupSecondaryButton.style.color = textColor.value;
+
+      mockupTop.style.color = textColor.value;
+
+      mockupButton.style.color = textColor.value;
+
+      mockupBody.style.color = textColor.value;
+
+      mockupTitle.style.color = textColor.value;
+
+      mockupLogo.style.color = textColor.value;
+
+      mockupLogo.style.borderColor = textColor.value;
+
+      mockupLogo.style.background = accentColor.value;
+
+      mockupBrandText.textContent = currentTheme + ' Studio';
+
+      mockupTitle.textContent = currentTheme;
+
+      swatchPrimary.style.background = primaryColor.value;
+
+      swatchSecondary.style.background = secondaryColor.value;
+
+      swatchAccent.style.background = accentColor.value;
+
+      mockupMeterFill.style.background = accentColor.value;
+
+      mockupMeterFill.style.width = `${Math.max(28, contrastAmount)}%`;
+ 
+      document.querySelectorAll('.mockup-line').forEach(line => {
+
+        line.style.background = textColor.value;
+
+        line.style.opacity = '0.55';
+
+      });
+
+      document.querySelectorAll('.mockup-card, .mockup-badge, .mockup-nav-item, .mockup-button').forEach(item => {
+
+        item.style.borderColor = textColor.value;
+
+      });
+
+    }
+ 
+    function hexToRgb(hex) {
+
+      const cleaned = hex.replace('#', '');
+
+      const bigint = parseInt(cleaned, 16);
+
+      return {
+
+        r: (bigint >> 16) & 255,
+
+        g: (bigint >> 8) & 255,
+
+        b: bigint & 255
+
+      };
+
+    }
+ 
+    function getColorFamily(hex) {
+
+      const { r, g, b } = hexToRgb(hex);
+
+      const max = Math.max(r, g, b);
+
+      const min = Math.min(r, g, b);
+
+      const diff = max - min;
+
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+ 
+      if (diff < 15) {
+
+        if (brightness > 220) return 'branco';
+
+        if (brightness < 50) return 'preto';
+
+        return 'cinza';
+
+      }
+ 
+      let hue;
+
+      if (max === r) {
+
+        hue = ((g - b) / diff) % 6;
+
+      } else if (max === g) {
+
+        hue = (b - r) / diff + 2;
+
+      } else {
+
+        hue = (r - g) / diff + 4;
+
+      }
+
+      hue = Math.round(hue * 60);
+
+      if (hue < 0) hue += 360;
+ 
+      if (hue >= 0 && hue < 15) return 'vermelho';
+
+      if (hue >= 15 && hue < 40) return 'laranja';
+
+      if (hue >= 40 && hue < 65) return 'amarelo';
+
+      if (hue >= 65 && hue < 170) return 'verde';
+
+      if (hue >= 170 && hue < 200) return 'ciano';
+
+      if (hue >= 200 && hue < 255) return 'azul';
+
+      if (hue >= 255 && hue < 300) return 'roxo';
+
+      if (hue >= 300 && hue < 345) return 'rosa';
+
+      if (brightness < 170 && r > 80 && g > 40 && b < 90) return 'marrom';
+
+      return 'vermelho';
+
+    }
+ 
+    function calculateContrast(hexA, hexB) {
+
+      const a = hexToRgb(hexA);
+
+      const b = hexToRgb(hexB);
+
+      return Math.abs(a.r - b.r) + Math.abs(a.g - b.g) + Math.abs(a.b - b.b);
+
+    }
+ 
+    function evaluatePalette() {
+
+      const theme = themes[state.currentIndex];
+
+      const families = [
+
+        getColorFamily(primaryColor.value),
+
+        getColorFamily(secondaryColor.value),
+
+        getColorFamily(accentColor.value)
+
+      ];
+ 
+      let points = 0;
+
+      let matched = 0;
+
+      let warnings = [];
+ 
+      families.forEach(family => {
+
+        if (theme.idealFamilies.includes(family)) matched++;
+
+        if (theme.avoidFamilies.includes(family)) warnings.push(family);
+
+      });
+ 
+      points += matched;
+ 
+      const contrastOne = calculateContrast(primaryColor.value, secondaryColor.value);
+
+      const contrastTwo = calculateContrast(primaryColor.value, accentColor.value);
+
+      const contrastThree = calculateContrast(secondaryColor.value, accentColor.value);
+
+      const avgContrast = (contrastOne + contrastTwo + contrastThree) / 3;
+ 
+      if (avgContrast > 180) points += 2;
+
+      else if (avgContrast > 120) points += 1;
+
+      else warnings.push('baixo contraste');
+ 
+      const text = reason.value.trim().toLowerCase();
+
+      const reasoningKeywords = ['confiança', 'calma', 'energia', 'destaque', 'moderno', 'limpeza', 'equilíbrio', 'alerta', 'apetite', 'organização', 'segurança', 'inovação'];
+
+      const keywordMatches = reasoningKeywords.filter(word => text.includes(word)).length;
+ 
+      if (text.length >= 30) points += 1;
+
+      if (keywordMatches >= 2) points += 2;
+
+      else if (keywordMatches >= 1) points += 1;
+
+      else warnings.push('justificativa pouco específica');
+ 
+      const finalPoints = Math.min(points, 8);
+
+      return { finalPoints, families, warnings, matched, avgContrast, theme };
+
+    }
+ 
+    function renderFeedback(result) {
+
+      let performance = 'Boa tentativa.';
+
+      if (result.finalPoints >= 7) performance = 'Excelente escolha de paleta.';
+
+      else if (result.finalPoints >= 5) performance = 'Paleta coerente e bem pensada.';
+
+      else if (result.finalPoints >= 3) performance = 'Você está no caminho certo, mas ainda pode ajustar melhor as cores.';
+ 
+      const familyText = `Famílias detectadas: ${result.families.join(', ')}.`;
+
+      const warningText = result.warnings.length
+
+        ? `Pontos de atenção: ${result.warnings.join(', ')}.`
+
+        : 'Sem pontos críticos encontrados.';
+ 
+      feedbackBox.innerHTML = `
+<strong>${performance}</strong> ⚡<br>
+
+        Você fez <strong>${result.finalPoints}/8 pontos</strong> nesta rodada.<br>
+
+        ${familyText}<br>
+
+        ${warningText}<br>
+
+        Dica do tema: ${result.theme.tips}
+
+      `;
+
+    }
+ 
+    function renderHistory() {
+
+      if (!state.history.length) {
+
+        historyList.innerHTML = '<div class="mini">Nenhuma rodada avaliada ainda.</div>';
+
+        return;
+
+      }
+ 
+      historyList.innerHTML = state.history
+
+        .map(item => `
+<div class="history-item">
+<strong>${item.theme}</strong>
+<div class="mini">Pontuação: ${item.points}/8</div>
+<div class="chips">
+<span class="chip" style="background:${item.colors[0]}"></span>
+<span class="chip" style="background:${item.colors[1]}"></span>
+<span class="chip" style="background:${item.colors[2]}"></span>
+</div>
+<div class="mini">${item.summary}</div>
+</div>
+
+        `)
+
+        .join('');
+
+    }
+ 
+    function updateScoreboard() {
+
+      scoreValue.textContent = state.score;
+
+      roundInfo.textContent = `Rodada ${state.currentIndex + 1} de ${themes.length}`;
+
+      const combo = Math.min((state.score / 40) * 100, 100);
+
+      comboFill.style.width = `${combo}%`;
+ 
+      if (state.score >= 30) mascot.textContent = '😎';
+
+      else if (state.score >= 20) mascot.textContent = '🔥';
+
+      else if (state.score >= 10) mascot.textContent = '😃';
+
+      else mascot.textContent = '🙂';
+
+    }
+ 
+    function startTimer() {
+
+      clearInterval(state.timerId);
+
+      state.timeLeft = 60;
+
+      timer.textContent = state.timeLeft;
+
+      state.timerId = setInterval(() => {
+
+        state.timeLeft--;
+
+        timer.textContent = state.timeLeft;
+
+        if (state.timeLeft <= 0) {
+
+          clearInterval(state.timerId);
+
+          feedbackBox.innerHTML = 'Tempo esgotado. Você pode avaliar mesmo assim ou passar para o próximo tema.';
+
+        }
+
+      }, 1000);
+
+    }
+ 
+    function nextTheme() {
+
+      state.currentIndex = (state.currentIndex + 1) % themes.length;
+
+      themeName.textContent = themes[state.currentIndex].name;
+
+      reason.value = '';
+
+      feedbackBox.innerHTML = 'Nova rodada iniciada. Escolha suas cores e escreva sua justificativa.';
+
+      updatePreview();
+
+      updateScoreboard();
+
+      startTimer();
+
+    }
+ 
+    function resetGame() {
+
+      state.currentIndex = 0;
+
+      state.score = 0;
+
+      state.evaluatedRounds = 0;
+
+      state.history = [];
+
+      primaryColor.value = '#2563eb';
+
+      secondaryColor.value = '#64748b';
+
+      accentColor.value = '#22c55e';
+
+      textColor.value = '#ffffff';
+
+      reason.value = '';
+
+      themeName.textContent = themes[0].name;
+
+      feedbackBox.innerHTML = 'Jogo reiniciado. Escolha suas cores e clique em avaliar.';
+
+      updateHexLabels();
+
+      updatePreview();
+
+      updateScoreboard();
+
+      renderHistory();
+
+      startTimer();
+
+    }
+ 
+    [primaryColor, secondaryColor, accentColor, textColor].forEach(input => {
+
+      input.addEventListener('input', () => {
+
+        updateHexLabels();
+
+        updatePreview();
+
+      });
+
+    });
+ 
+    document.getElementById('evaluateBtn').addEventListener('click', () => {
+
+      const result = evaluatePalette();
+
+      state.score += result.finalPoints;
+
+      state.evaluatedRounds++;
+
+      renderFeedback(result);
+
+      state.history.unshift({
+
+        theme: result.theme.name,
+
+        points: result.finalPoints,
+
+        colors: [primaryColor.value, secondaryColor.value, accentColor.value],
+
+        summary: `Cores identificadas como ${result.families.join(', ')}.`
+
+      });
+
+      renderHistory();
+
+      updateScoreboard();
+
+    });
+ 
+    document.getElementById('nextBtn').addEventListener('click', nextTheme);
+
+    document.getElementById('resetBtn').addEventListener('click', resetGame);
+ 
+    updateHexLabels();
+
+    updatePreview();
+
+    updateScoreboard();
+
+    renderHistory();
+
+    startTimer();
+</script>
+</body>
+</html>
+
+ 
